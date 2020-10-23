@@ -8,6 +8,9 @@ public class GameManager {
     private ExplainPanel _explain;
     private MenuPanel _menu;
     private InGameData _gameData;
+
+    private RankPanel _rank;
+
     private GameManager(){
 
     }//constructor
@@ -18,11 +21,14 @@ public class GameManager {
     public MenuPanel get_menu(){return _menu;}
     public InGameData get_gameData(){return _gameData;}
 
+    public RankPanel get_rank() {return _rank; }
+
     public void set_view(MainPanel view){ this._view = view;}
     public void set_inGame(InGameView inGame){this._inGame = inGame;}
     public void set_explain(ExplainPanel explain){this._explain = explain;}
     public void set_menu(MenuPanel menu){this._menu = menu;}
     public void set_gameData(InGameData data){this._gameData = data;}
+    public void set_rank(RankPanel rank) {this._rank = rank; }
 
     public static GameManager getInstance(){
         if(s_instance == null) s_instance = new GameManager();

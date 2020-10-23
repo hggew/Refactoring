@@ -83,6 +83,8 @@ public class InGameController {
             if(_data.focusedPawn.getCurrentIndex()==0) catched = _data.moveOnePawn(_data.activatedPlayer, _data.focusedPawn, p.getCurrentIndex());  //대기칸에 있는 말을 이동하는 경우 그 말만 이동
             else catched = _data.moveAllPawns(_data.activatedPlayer,_data.focusedPawn.getCurrentIndex(),p.getCurrentIndex());   //윷판 위의 말을 이동하는 경우 그 말이 있는 위치의 모든 말을 이동
             for(ThrowData data:_data.previewPawns) data.preview.setVisible(false);  //말 이동 후 미리보기 모두 보이지 않게 하기
+
+
             _data.previewPawns.remove(clicked); //결과 데이터의 리스트에서 방금 사용된 결과 데이터를 삭제
             _data.previewPawns.trimToSize();    //리스트 사이즈 갱신
 
@@ -96,27 +98,39 @@ public class InGameController {
                 JOptionPane dialog = new JOptionPane();
                 int result = JOptionPane.showConfirmDialog( _view, str,"Game End",JOptionPane.YES_NO_OPTION);   //게임을 계속 진행할 지  묻기
                 switch(result) {
-                    case JOptionPane.NO_OPTION:        //더 이상 진행하지 않을 경우 창 종료
-                        System.exit(0);
-                        break;
-                    case JOptionPane.YES_OPTION:    //계속 진행하는 경우 진행중이던 게임 초기화 후 메뉴로 넘어감
-                    default:
-                        for(Pawn pawn:_data.activatedPlayer.pawns) pawn.removeMouseListener(_data.activatedPlayer == _data.leftPlayer ? leftPawnListener : rightPawnListener);  //턴 진행중이던 플레이어의 말에 추가된 리스터 삭제
+                    case JOptionPane.NO_OPTION:
+                        InputInfo frame = new InputInfo();
 
-                        //새 게임에서 왼쪽부터 시작할 수 있도록 설정
+                        frame.setTitle("Input ID");
+                        frame.setLocation(0,0);
+                        frame.setSize(1000,800);
+                        frame.setVisible(true);
+                        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+                        frame.setResizable(true);
+
+                        break;
+                    case JOptionPane.YES_OPTION:
+                        InputInfo frame1 = new InputInfo();
+
+                        frame1.setTitle("Input ID");
+                        frame1.setLocation(0,0);
+                        frame1.setSize(1000,800);
+                        frame1.setVisible(true);
+                        frame1.setResizable(true);
+
+                    default:
+                        for(Pawn pawn:_data.activatedPlayer.pawns) pawn.removeMouseListener(_data.activatedPlayer == _data.leftPlayer ? leftPawnListener : rightPawnListener);
+
                         if( _data.activatedPlayer == _data.rightPlayer) passPlayerTurn();
                         ready(_data.leftPlayer);
                         _data.InGameData_init();
-
-                        //남아있던 결과 데이터 모두 정리
                         _data.previewPawns.clear();
                         _data.previewPawns.trimToSize();
 
-                        //윷 이미지를 게임 시작 상태로 바꾸기
                         _view.lblThrowing.setIcon(_view.lblThrowing.iconYut[0]);
                         _view.lblYutResult.setIcon(_data.iconYutText[6]);
 
-                        GameManager.getInstance().get_view().showMenu(); //메인메뉴로 넘어감
+                        GameManager.getInstance().get_view().showMenu();
                         return;
                 } // switch
             }

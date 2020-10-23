@@ -23,8 +23,8 @@ public class ExplainPanel extends JPanel {
 
         imageIndex=0;               //인덱스 0으로 설정 : 처음 게임설명이미지
         //이미지 배열에 이미지 생성
-        explains = new ImageIcon[3];
-        for(int i=0;i<3;i++)
+        explains = new ImageIcon[4];
+        for(int i=0;i<4;i++)
             explains[i] = new ImageIcon("images/rule"+(i+1)+".png");
 
         //게임 방법 타이틀

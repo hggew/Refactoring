@@ -11,6 +11,7 @@ public class MenuPanel extends JPanel {
 
     private JLabel lblTitle;
     public JButton btnStart, btnExplain, btnExit;
+    public JButton btnRank;
 
     public MenuPanel() {
 
@@ -41,9 +42,15 @@ public class MenuPanel extends JPanel {
         GameManager.getInstance().setBtnInit(btnExplain);
         add(btnExplain);
 
+        btnRank = new JButton("Rank");
+        btnRank.setBounds(300, 600, 400, 100);
+        btnRank.setFont(new Font("OCR A Extended", Font.BOLD, 40));
+        GameManager.getInstance().setBtnInit(btnRank);
+        add(btnRank);
+
         //게임종료 버튼 세팅
         btnExit = new JButton("Exit");
-        btnExit.setBounds(300, 600, 400, 100);
+        btnExit.setBounds(300, 700, 400, 100);
         btnExit.setFont(new Font("OCR A Extended", Font.BOLD, 40));
         GameManager.getInstance().setBtnInit(btnExit);
 

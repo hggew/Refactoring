@@ -24,12 +24,12 @@ public class ExplainPanelController {
             //버튼이 next일때 다음 페이지의 이미지 변경
             if(btn == _explain.btnNext){
                 //지금 페이지가 마지막 페이지면 게임 바로시작
-                if(_explain.imageIndex == 2) {
+                if(_explain.imageIndex == 3) {
                     GameManager.getInstance().get_view().showInGame();
                     return;
                 }
                 _explain.imageIndex += 1;  //이미지의 인덱스 +1
-                if(_explain.imageIndex == 2){ btn.setText("Start"); }  //마지막 설명페이지에서 start로 버튼 이름 변경
+                if(_explain.imageIndex == 3){ btn.setText("Start"); }  //마지막 설명페이지에서 start로 버튼 이름 변경
                 _explain.btnPrev.setText("Prev Page"); //게임설명 첫페이지를 제외하고 prev버튼 이름을 prev page로 변경
             }
             //버튼이 prev 일때 이전 페이지 변경
