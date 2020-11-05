@@ -335,7 +335,7 @@ public class InGameController {
         else if(player == _data.rightPlayer) GameManager.getInstance().get_inGame().rightThrowBtn.setEnabled(true);
         _data.throwableNCnt = 1;
     }
-//
+//fffffff
     public void passPlayerTurn(){   //현재 진행중인 턴을 상대 차례로 넘기는 메소드
 
         _data.activatedPlayer.isMyTurn = false;
