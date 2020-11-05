@@ -20,7 +20,7 @@ public class InGameController {
         _view = GameManager.getInstance().get_inGame();         // InGameView 받아오기
         _data = GameManager.getInstance().get_gameData();     //   데이터 받아오기
 
-        _inputinfo = GameManager.getInstance().get_inputinfo();
+//        _inputinfo = GameManager.getInstance().get_inputinfo();
 
         //각 플레이어의 폰 선택 리스터 생성
         leftPawnListener = new PawnClickListener();
@@ -99,14 +99,19 @@ public class InGameController {
                 if(_data.activatedPlayer== _data.leftPlayer) str="Left Player Win!! \n Do you want new Game?" ;
                 else str= "Right Player Win!! \n Do you want new Game?";
 
-                JOptionPane dialog = new JOptionPane();
+//                JOptionPane dialog = new JOptionPane();
                 int result = JOptionPane.showConfirmDialog( _view, str,"Game End",JOptionPane.YES_NO_OPTION);   //게임을 계속 진행할 지  묻기
+
+                _inputinfo = new InputInfo();
                 _inputinfo.setTitle("Input ID");
+                _inputinfo.setLocation(0,0);
+                _inputinfo.setSize(1000,800);
+                _inputinfo.setVisible(true);
+                _inputinfo.setResizable(true);
                 switch(result) {
                     case JOptionPane.NO_OPTION:
                         _inputinfo.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 //                        InputInfo frame = new InputInfo();
-//
 //                        frame.setTitle("Input ID");
 //                        frame.setLocation(0,0);
 //                        frame.setSize(1000,800);
