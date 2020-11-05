@@ -10,6 +10,7 @@ public class InGameController {
     private InGameView _view;
     private InGameData _data;
     private PawnClickListener leftPawnListener, rightPawnListener;
+    private InputInfo _inputinfo;
 
     /*field mowe to randomYutResult method*/
     //private double YutResult;
@@ -19,6 +20,7 @@ public class InGameController {
         _view = GameManager.getInstance().get_inGame();         // InGameView 받아오기
         _data = GameManager.getInstance().get_gameData();     //   데이터 받아오기
 
+        _inputinfo = GameManager.getInstance().get_inputinfo();
 
         //각 플레이어의 폰 선택 리스터 생성
         leftPawnListener = new PawnClickListener();
@@ -99,26 +101,26 @@ public class InGameController {
 
                 JOptionPane dialog = new JOptionPane();
                 int result = JOptionPane.showConfirmDialog( _view, str,"Game End",JOptionPane.YES_NO_OPTION);   //게임을 계속 진행할 지  묻기
+                _inputinfo.setTitle("Input ID");
                 switch(result) {
                     case JOptionPane.NO_OPTION:
-                        InputInfo frame = new InputInfo();
-
-                        frame.setTitle("Input ID");
-                        frame.setLocation(0,0);
-                        frame.setSize(1000,800);
-                        frame.setVisible(true);
-                        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-                        frame.setResizable(true);
-
+                        _inputinfo.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+//                        InputInfo frame = new InputInfo();
+//
+//                        frame.setTitle("Input ID");
+//                        frame.setLocation(0,0);
+//                        frame.setSize(1000,800);
+//                        frame.setVisible(true);
+//                        frame.setResizable(true);
+//                        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
                         break;
                     case JOptionPane.YES_OPTION:
-                        InputInfo frame1 = new InputInfo();
-
-                        frame1.setTitle("Input ID");
-                        frame1.setLocation(0,0);
-                        frame1.setSize(1000,800);
-                        frame1.setVisible(true);
-                        frame1.setResizable(true);
+//                        InputInfo frame1 = new InputInfo();
+//                        frame1.setTitle("Input ID");
+//                        frame1.setLocation(0,0);
+//                        frame1.setSize(1000,800);
+//                        frame1.setVisible(true);
+//                        frame1.setResizable(true);
 
                     default:
                         for(Pawn pawn:_data.activatedPlayer.pawns)
@@ -183,6 +185,15 @@ public class InGameController {
         public void mousePressed(MouseEvent e) { }
     }
 
+    public void makeInputinfoFrame(){
+        InputInfo frame = new InputInfo();
+
+        frame.setTitle("Input ID");
+        frame.setLocation(0,0);
+        frame.setSize(1000,800);
+        frame.setVisible(true);
+        frame.setResizable(true);
+    }
 
     private class ThrowingYut implements ActionListener {   //윷 던지기 버튼을 누르면 발생하는 이벤트 리스너
         @Override
