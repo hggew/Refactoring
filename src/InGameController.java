@@ -121,7 +121,8 @@ public class InGameController {
                         frame1.setResizable(true);
 
                     default:
-                        for(Pawn pawn:_data.activatedPlayer.pawns) pawn.removeMouseListener(_data.activatedPlayer == _data.leftPlayer ? leftPawnListener : rightPawnListener);
+                        for(Pawn pawn:_data.activatedPlayer.pawns)
+                            pawn.removeMouseListener(_data.activatedPlayer == _data.leftPlayer ? leftPawnListener : rightPawnListener);
 
                         if( _data.activatedPlayer == _data.rightPlayer) passPlayerTurn();
                         ready(_data.leftPlayer);
@@ -141,10 +142,12 @@ public class InGameController {
 
             if(catched) {   //말 이동 후 상대 말을 잡으면 윷을 던질 기회 획득
                 ready(_data.activatedPlayer);   //윷 던질 준비 시키기
-                for(Pawn pawn:_data.activatedPlayer.pawns) pawn.removeMouseListener(_data.activatedPlayer == _data.leftPlayer ? leftPawnListener : rightPawnListener);  //윷을 던지는 동안에는 말 이동시키지 못하도록 리스너 제거
+                for(Pawn pawn:_data.activatedPlayer.pawns)
+                    pawn.removeMouseListener(_data.activatedPlayer == _data.leftPlayer ? leftPawnListener : rightPawnListener);  //윷을 던지는 동안에는 말 이동시키지 못하도록 리스너 제거
             }
             else if(_data.previewPawns.size()==0) { //추가 턴을 획득하지 못하고 던진 윷 결과데이터들을 모두 사용한 경우
-                for(Pawn pawn:_data.activatedPlayer.pawns) pawn.removeMouseListener(_data.activatedPlayer == _data.leftPlayer ? leftPawnListener : rightPawnListener);  //말 선택 리스너 모두 제거
+                for(Pawn pawn:_data.activatedPlayer.pawns)
+                    pawn.removeMouseListener(_data.activatedPlayer == _data.leftPlayer ? leftPawnListener : rightPawnListener);  //말 선택 리스너 모두 제거
                 passPlayerTurn();   //상대에게 턴 넘겨주기
             }
             else {  //아직 이동할 결과데이터가 남아있는 경우
@@ -160,7 +163,8 @@ public class InGameController {
                     }
                     if(flag == true){   //게임판에 올라온 말이 없는 경우(빽도 이동이 가능한 말이 없는 경우)
                         //더이상 이동할 수 없으므로 턴 넘겨주기
-                        for(Pawn pawn:_data.activatedPlayer.pawns) pawn.removeMouseListener(_data.activatedPlayer == _data.leftPlayer ? leftPawnListener : rightPawnListener);
+                        for(Pawn pawn:_data.activatedPlayer.pawns)
+                            pawn.removeMouseListener(_data.activatedPlayer == _data.leftPlayer ? leftPawnListener : rightPawnListener);
                         passPlayerTurn();
                         _data.previewPawns.clear();
                         _data.previewPawns.trimToSize();
@@ -179,6 +183,7 @@ public class InGameController {
         public void mousePressed(MouseEvent e) { }
     }
 
+
     private class ThrowingYut implements ActionListener {   //윷 던지기 버튼을 누르면 발생하는 이벤트 리스너
         @Override
         public void actionPerformed(ActionEvent e) {
@@ -187,9 +192,10 @@ public class InGameController {
             if ((_data.leftPlayer.isMyTurn && btn == _view.rightThrowBtn) || (_data.rightPlayer.isMyTurn && btn == _view.leftThrowBtn))
                 return;
 
+            //상태
             if(_data.activatedPlayer.isNowAbility1Use==true)    //윷 결과 조작 능력 사용
                 _data.activatedPlayer.isNowAbility1Use=false;
-
+            //상태
             else{   //윷 결과 랜덤으로 뽑기
 
 //                YutResult = Math.random();
@@ -207,22 +213,24 @@ public class InGameController {
 //                    _data.throwResult = 6;
                 _data.throwResult = randomYutResult();
             }
-
+            //모습
             _view.lblThrowing.start();  //윷 던지는 모습 보여주기
             btn.setEnabled(false);
-
             _view.lblThrowing.setResult(_data.throwResult); //Yut으로 결과값보내서 결과이미지 띄우기
 
+            //상태
             if (_data.throwResult != 4 && _data.throwResult != 5)   //윷이나 모가 나온 경우
                 _data.throwableNCnt--;  //던질 수 있는 횟수 -1
 
-            //던진 결과 저장
+            //모습
+            //던진 결과 저장 - 미리보기용
             ThrowData data = new ThrowData(_data.throwResult);
             data.preview.addMouseListener(new MoveSelectedPawn());
             _data.previewPawns.add(data);
             _view.add(data.preview);
             _view.setComponentZOrder(data.preview, 0);  //윷판보다 위에 보이도록 설정
 
+            //상태
             //윷 던질 기회 모두 사용한 경우
             if (_data.throwableNCnt == 0) {
                 //우선 빽도 예외처리
@@ -236,26 +244,29 @@ public class InGameController {
                     }
                     if(flag == true){   //윷판에 올라온 말이 없는 경우(빽도 이동이 가능한 말이 없는 경우)
                         //상대 턴으로 넘어가기
-                        for(Pawn pawn:_data.activatedPlayer.pawns) pawn.removeMouseListener(_data.activatedPlayer == _data.leftPlayer ? leftPawnListener : rightPawnListener);
+                        for(Pawn pawn:_data.activatedPlayer.pawns)
+                            pawn.removeMouseListener(_data.activatedPlayer == _data.leftPlayer ? leftPawnListener : rightPawnListener);
                         passPlayerTurn();
                         _data.previewPawns.clear();
                         _data.previewPawns.trimToSize();
                     }
                     else{   //이동할 말이 있다면 말 이동을 위한 준비
                         //내 말 중 완주하지 않은 말에 말 선택 리스너를 add
-                        for (Pawn P : _data.activatedPlayer.pawns)
-                            if (P.isFinished() == false)
-                                P.addMouseListener(_data.activatedPlayer == _data.leftPlayer ? leftPawnListener : rightPawnListener);
+                        activationPawnClick();
+//                            if (P.isFinished() == false)
+//                        for (Pawn P : _data.activatedPlayer.pawns)
+//                                P.addMouseListener(_data.activatedPlayer == _data.leftPlayer ? leftPawnListener : rightPawnListener);
                     }
                 }
                 else {
                     //말 이동 준비
                     //내 말 중 완주하지 않은 말에 말 선택 리스너를  add
-                    for (Pawn P : _data.activatedPlayer.pawns) {
-                        if (P.isFinished() == false) {
-                            P.addMouseListener(_data.activatedPlayer == _data.leftPlayer ? leftPawnListener : rightPawnListener);
-                        }   //if
-                    }   //for
+                    activationPawnClick();
+//                    for (Pawn P : _data.activatedPlayer.pawns) {
+//                        if (P.isFinished() == false) {
+//                            P.addMouseListener(_data.activatedPlayer == _data.leftPlayer ? leftPawnListener : rightPawnListener);
+//                        }   //if
+//                    }   //for
                 }   //else
             }   //if(다 던짐)
             else {  //던질 기회가 남았다면 다시 던질 준비
@@ -293,8 +304,12 @@ public class InGameController {
 
     public void init_Game(){    //게임 초기화 메소드
         //양쪽 플레이어의 말에 add된 리스너 제거
-        for(Pawn p:_data.leftPlayer.pawns)p.removeMouseListener(_data.activatedPlayer==_data.leftPlayer ? leftPawnListener : rightPawnListener);
-        for(Pawn p:_data.rightPlayer.pawns)p.removeMouseListener(_data.activatedPlayer==_data.leftPlayer ? leftPawnListener : rightPawnListener);
+        for(Pawn p:_data.leftPlayer.pawns)
+            p.removeMouseListener(leftPawnListener);
+//            p.removeMouseListener(_data.activatedPlayer == _data.leftPlayer ? leftPawnListener : rightPawnListener);
+        for(Pawn p:_data.rightPlayer.pawns)
+            p.removeMouseListener(rightPawnListener);
+//            p.removeMouseListener(_data.activatedPlayer == _data.leftPlayer ? leftPawnListener : rightPawnListener);
 
         //양 플레이어의 던지기 버튼 비활성화
         _view.leftThrowBtn.setEnabled(false);
@@ -365,4 +380,13 @@ public class InGameController {
         else if (YutResult < 1) return 6;
         return 0;
     }
+
+
+    public void activationPawnClick(){
+        for (Pawn P : _data.activatedPlayer.pawns)
+            if (P.isFinished() == false)
+                P.addMouseListener(_data.activatedPlayer == _data.leftPlayer ? leftPawnListener : rightPawnListener);
+    }
+
+
 }
