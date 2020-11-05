@@ -121,8 +121,8 @@ public class InGameController {
                         frame1.setResizable(true);
 
                     default:
-                        for(Pawn pawn:_data.activatedPlayer.pawns) pawn.removeMouseListener(_data.activatedPlayer == _data.leftPlayer ? leftPawnListener : rightPawnListener);
-
+                        //for(Pawn pawn:_data.activatedPlayer.pawns) pawn.removeMouseListener(_data.activatedPlayer == _data.leftPlayer ? leftPawnListener : rightPawnListener);
+                        deactivationPawnClick();
                         if( _data.activatedPlayer == _data.rightPlayer) passPlayerTurn();
                         ready(_data.leftPlayer);
                         _data.InGameData_init();
@@ -141,10 +141,12 @@ public class InGameController {
 
             if(catched) {   //말 이동 후 상대 말을 잡으면 윷을 던질 기회 획득
                 ready(_data.activatedPlayer);   //윷 던질 준비 시키기
-                for(Pawn pawn:_data.activatedPlayer.pawns) pawn.removeMouseListener(_data.activatedPlayer == _data.leftPlayer ? leftPawnListener : rightPawnListener);  //윷을 던지는 동안에는 말 이동시키지 못하도록 리스너 제거
+                //for(Pawn pawn:_data.activatedPlayer.pawns) pawn.removeMouseListener(_data.activatedPlayer == _data.leftPlayer ? leftPawnListener : rightPawnListener);  //윷을 던지는 동안에는 말 이동시키지 못하도록 리스너 제거
+                deactivationPawnClick();
             }
             else if(_data.previewPawns.size()==0) { //추가 턴을 획득하지 못하고 던진 윷 결과데이터들을 모두 사용한 경우
-                for(Pawn pawn:_data.activatedPlayer.pawns) pawn.removeMouseListener(_data.activatedPlayer == _data.leftPlayer ? leftPawnListener : rightPawnListener);  //말 선택 리스너 모두 제거
+                //for(Pawn pawn:_data.activatedPlayer.pawns) pawn.removeMouseListener(_data.activatedPlayer == _data.leftPlayer ? leftPawnListener : rightPawnListener);  //말 선택 리스너 모두 제거
+                deactivationPawnClick();
                 passPlayerTurn();   //상대에게 턴 넘겨주기
             }
             else {  //아직 이동할 결과데이터가 남아있는 경우
@@ -160,7 +162,8 @@ public class InGameController {
                     }
                     if(flag == true){   //게임판에 올라온 말이 없는 경우(빽도 이동이 가능한 말이 없는 경우)
                         //더이상 이동할 수 없으므로 턴 넘겨주기
-                        for(Pawn pawn:_data.activatedPlayer.pawns) pawn.removeMouseListener(_data.activatedPlayer == _data.leftPlayer ? leftPawnListener : rightPawnListener);
+                        //for(Pawn pawn:_data.activatedPlayer.pawns) pawn.removeMouseListener(_data.activatedPlayer == _data.leftPlayer ? leftPawnListener : rightPawnListener);
+                        deactivationPawnClick();
                         passPlayerTurn();
                         _data.previewPawns.clear();
                         _data.previewPawns.trimToSize();
@@ -236,7 +239,8 @@ public class InGameController {
                     }
                     if(flag == true){   //윷판에 올라온 말이 없는 경우(빽도 이동이 가능한 말이 없는 경우)
                         //상대 턴으로 넘어가기
-                        for(Pawn pawn:_data.activatedPlayer.pawns) pawn.removeMouseListener(_data.activatedPlayer == _data.leftPlayer ? leftPawnListener : rightPawnListener);
+                        //for(Pawn pawn:_data.activatedPlayer.pawns) pawn.removeMouseListener(_data.activatedPlayer == _data.leftPlayer ? leftPawnListener : rightPawnListener);
+                        deactivationPawnClick();
                         passPlayerTurn();
                         _data.previewPawns.clear();
                         _data.previewPawns.trimToSize();
@@ -293,8 +297,8 @@ public class InGameController {
 
     public void init_Game(){    //게임 초기화 메소드
         //양쪽 플레이어의 말에 add된 리스너 제거
-        for(Pawn p:_data.leftPlayer.pawns)p.removeMouseListener(_data.activatedPlayer==_data.leftPlayer ? leftPawnListener : rightPawnListener);
-        for(Pawn p:_data.rightPlayer.pawns)p.removeMouseListener(_data.activatedPlayer==_data.leftPlayer ? leftPawnListener : rightPawnListener);
+        for(Pawn p:_data.leftPlayer.pawns)p.removeMouseListener(leftPawnListener);
+        for(Pawn p:_data.rightPlayer.pawns)p.removeMouseListener(rightPawnListener);
 
         //양 플레이어의 던지기 버튼 비활성화
         _view.leftThrowBtn.setEnabled(false);
@@ -364,5 +368,10 @@ public class InGameController {
         else if (YutResult <= 0.9136) return 5;
         else if (YutResult < 1) return 6;
         return 0;
+    }
+    public void deactivationPawnClick()
+    {
+        for(Pawn pawn:_data.activatedPlayer.pawns)
+            pawn.removeMouseListener(_data.activatedPlayer == _data.leftPlayer ? leftPawnListener : rightPawnListener);
     }
 }
