@@ -3,6 +3,7 @@ public abstract class Ability {
     public InGameData _data = GameManager.getInstance().get_gameData();
     public InGameView _view = GameManager.getInstance().get_inGame();
     public String abilityName;
+
     public void run(Player user)
     {
         if(user != _data.activatedPlayer) return;

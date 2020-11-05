@@ -33,16 +33,13 @@ public class Database {
         }
     }
 
-
-
-
-
-
-
+    //RankPanel의 ShowRank에서 호출
     public static ResultSet dbExecuteQuery(String queryStmt) throws SQLException, ClassNotFoundException {
         try {
             System.out.println("SQL : " + queryStmt + "\n");
             stmt = con.createStatement();
+            // stmt에 들어있는 select 문을 사용하기 위해 executeQuery 사용
+            // resultSet 객체에 결과값 저장
             resultSet = stmt.executeQuery(queryStmt);
         }
         catch (SQLException e) {
@@ -52,60 +49,6 @@ public class Database {
         finally {
         }
         return resultSet;
-    }
-
-
-
-    public static void dbExecuteUpdate(String sqlStmt) throws SQLException, ClassNotFoundException {
-        Statement stmt = null;
-        try {
-            stmt = con.createStatement();
-            stmt.executeUpdate(sqlStmt);
-        }
-        catch (SQLException e) {
-            System.out.println("DBconnect executeUpdate fail");
-            throw e;
-        }
-        finally {
-            if (stmt != null) {
-                stmt.close();
-            }
-        }
-    }
-
-
-
-    public static ResultSet dbExecuteQueryPstmt(String queryStmt) throws SQLException, ClassNotFoundException {
-        try {
-            System.out.println("SQL : " + queryStmt + "\n");
-            pstmt=con.prepareStatement(queryStmt);
-            resultSet = stmt.executeQuery(queryStmt);
-        }
-        catch (SQLException e) {
-            System.out.println("DBconnect - executeQuery fail");
-            throw e;
-        }
-        finally {
-        }
-        return resultSet;
-    }
-
-
-    public static void dbExecuteUpdatePstmt(String sqlStmt) throws SQLException, ClassNotFoundException {
-        Statement stmt = null;
-        try {
-            pstmt = con.prepareStatement(sqlStmt);
-            pstmt.executeUpdate(sqlStmt);
-        }
-        catch (SQLException e) {
-            System.out.println("DBconnect executeUpdate fail");
-            throw e;
-        }
-        finally {
-            if (stmt != null) {
-                stmt.close();
-            }
-        }
     }
 
 }

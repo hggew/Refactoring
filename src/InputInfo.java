@@ -61,15 +61,10 @@ public class InputInfo extends JFrame {
                 int cnt = 0;
                 String queryNorE = "select cnt_win from ranking where name = ?";
                 pstmt=Database.con.prepareStatement(queryNorE);
-                System.out.println("1");
                 pstmt.setString(1, t1.getText());
-                System.out.println("2");
                 rs = pstmt.executeQuery();
-                System.out.println("3");
-
 
                 if(rs.next()) {
-                    System.out.println("4");
                     System.out.println("You're an existing member!");
                     String queryScore = "select cnt_win from ranking where name = ?";
                     pstmt=Database.con.prepareStatement(queryScore);
@@ -78,20 +73,17 @@ public class InputInfo extends JFrame {
                     while (rs.next()) {
                         cnt = rs.getInt(1);
                     }
-                    System.out.println("5");
                     cnt++;
 
                     String query = "UPDATE ranking SET cnt_win = ? where name = ?";
                     pstmt = Database.con.prepareStatement(query);
                     pstmt.setInt(1, cnt);
                     pstmt.setString(2, t1.getText());
-                    System.out.println("6");
                     pstmt.executeUpdate();
 
                 }
                 else
                 {
-                    System.out.println("7");
                     System.out.println("You're an new member!");
                     String queryNEW = "INSERT INTO ranking VALUES (?,?)";
 
