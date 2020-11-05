@@ -11,6 +11,8 @@ public class InGameController {
     private InGameData _data;
     private PawnClickListener leftPawnListener, rightPawnListener;
 
+    /*field mowe to randomYutResult method*/
+    //private double YutResult;
 
     public InGameController() {
 
@@ -189,6 +191,20 @@ public class InGameController {
                 _data.activatedPlayer.isNowAbility1Use=false;
 
             else{   //윷 결과 랜덤으로 뽑기
+
+//                YutResult = Math.random();
+//                if (YutResult <= 0.1536)
+//                    _data.throwResult =1;
+//                else if (YutResult <= 0.4992)
+//                    _data.throwResult = 2;
+//                else if (YutResult <= 0.7584)
+//                    _data.throwResult = 3;
+//                else if (YutResult <= 0.8880)
+//                    _data.throwResult = 4;
+//                else if (YutResult <= 0.9136)
+//                    _data.throwResult = 5;
+//                else if (YutResult < 1)
+//                    _data.throwResult = 6;
                 _data.throwResult = randomYutResult();
             }
 
@@ -337,6 +353,7 @@ public class InGameController {
         GameManager.getInstance().get_inGame().repaint();
     }
 
+    /*sun randomYutResult method extract*/
     public int randomYutResult()
     {
         double YutResult = Math.random();
