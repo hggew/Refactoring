@@ -335,9 +335,9 @@ public class InGameController {
     public void change_playerImgnLabel(){   //진행중인 차례에 맞게 플레이어 이미지 바꾸는 메소드
         //left player turn
         if(_data.activatedPlayer == _data.leftPlayer){
-            _data.leftPlayer.imgPlayer.setIcon(_data.leftPlayer.iconPalyer[0]);
+            _data.leftPlayer.imgPlayer.setIcon(_data.leftPlayer.iconPlayer[0]);
             _data.leftPlayer.imgPlayer.setBounds(-25,90,250,230);
-            _data.rightPlayer.imgPlayer.setIcon(_data.rightPlayer.iconPalyer[1]);
+            _data.rightPlayer.imgPlayer.setIcon(_data.rightPlayer.iconPlayer[1]);
             _data.rightPlayer.imgPlayer.setBounds(-1,90,250,230);
 
 
@@ -346,9 +346,9 @@ public class InGameController {
         }
         //right player turn
         else{
-            _data.leftPlayer.imgPlayer.setIcon(_data.leftPlayer.iconPalyer[1]);
+            _data.leftPlayer.imgPlayer.setIcon(_data.leftPlayer.iconPlayer[1]);
             _data.leftPlayer.imgPlayer.setBounds(-1,90,250,230);
-            _data.rightPlayer.imgPlayer.setIcon(_data.rightPlayer.iconPalyer[0]);
+            _data.rightPlayer.imgPlayer.setIcon(_data.rightPlayer.iconPlayer[0]);
             _data.rightPlayer.imgPlayer.setBounds(-25,90,250,230);
 
             _data.leftPlayer.lblTurn.setVisible(false);

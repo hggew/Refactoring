@@ -10,7 +10,7 @@ public class InGameData {
     public Point[] leftPawnWaiting, rightPawnWaiting;   //대기칸의 좌표
 
     public ImageIcon[]    iconYutText;  //윷을 던지면 윷 오른쪽에 보여주는 글자 이미지들
-    public String[]  iconYutTextName = new String[7];   //윷 오른쪽에 보여줄 텍스트 이미지의 경로
+    //public String[]  iconYutTextName = new String[7];   //윷 오른쪽에 보여줄 텍스트 이미지의 경로
 
 
     public Player activatedPlayer;  //현재 턴을 진행중인 플레이어
@@ -23,12 +23,16 @@ public class InGameData {
 
     public InGameData(){
 
-        int x, y;
+        //move to setBoardRoadIndex
+        //int x, y;
 
         GameManager.getInstance().set_gameData(this);   //게임매니저에 인스턴스를 등록해둔다
         //각 플레이어 생성
+        makePlayer();//make player and set player Image
+        /*
         leftPlayer = new Player("images/left_pawn.png", 80, 80);
         rightPlayer = new Player("images/right_pawn.png",100,75);
+*/
 
         throwResult = 0;
         activatedPlayer = leftPlayer;   //왼쪽 플레이어부터 게임 진행 시작
@@ -36,14 +40,16 @@ public class InGameData {
         previewPawns = new ArrayList<ThrowData>();  //던지기 결과 리스트 생성
 
         //플레이어 움직이는 사진지정
-        leftPlayer.iconPalyer[0]= new ImageIcon("images/Left_move.gif");
-        leftPlayer.iconPalyer[1]= new ImageIcon("images/Left_stop.png");
+        /*
+        leftPlayer.iconPlayer[0]= new ImageIcon("images/Left_move.gif");
+        leftPlayer.iconPlayer[1]= new ImageIcon("images/Left_stop.png");
 
-        rightPlayer.iconPalyer[0] = new ImageIcon("images/Right_move.gif");
-        rightPlayer.iconPalyer[1] = new ImageIcon("images/Right_stop.png");
-
+        rightPlayer.iconPlayer[0] = new ImageIcon("images/Right_move.gif");
+        rightPlayer.iconPlayer[1] = new ImageIcon("images/Right_stop.png");
+*/
         //각 플레이어 말들의 대기 칸 좌표 미리 저장
-        leftPawnWaiting = new Point[4];
+        setPawnCoordinates();
+        /*leftPawnWaiting = new Point[4];
         leftPawnWaiting[0] = new Point(10,410);
         leftPawnWaiting[1] = new Point(110,410);
         leftPawnWaiting[2] = new Point(10,510);
@@ -56,9 +62,11 @@ public class InGameData {
         rightPawnWaiting[3] = new Point(911,510);
 
         for(int i=0;i<4;i++) leftPlayer.pawns[i].setLocation(leftPawnWaiting[i]);
-        for(int i=0;i<4;i++) rightPlayer.pawns[i].setLocation(rightPawnWaiting[i]);
+        for(int i=0;i<4;i++) rightPlayer.pawns[i].setLocation(rightPawnWaiting[i]);*/
 
         //기본적인 길 인덱스
+        setBoardRoadIndex();
+        /*
         boardIndexer = new BoardIndexData[30];
         boardIndexer[0] = new BoardIndexData(0,0,0,false,0);
         boardIndexer[5] = new BoardIndexData(697,32,5,true,26);
@@ -97,23 +105,22 @@ public class InGameData {
         boardIndexer[28].prevIndex = 23;
         boardIndexer[29].nextIndex = 15;
         boardIndexer[20].nextIndex = 0;
-
-
-
+*/
 
         //윷던지고 결과 텍스트 이미지 변경
-        iconYutTextName[0]="images/imgDO.png";
+        setYutTextImage();
+        /*iconYutTextName[0]="images/imgDO.png";
         iconYutTextName[1]="images/imgGAE.png";
         iconYutTextName[2]="images/imgGIRL.png";
         iconYutTextName[3]="images/imgYUT.png";
         iconYutTextName[4]="images/imgMO.png";
         iconYutTextName[5]="images/imgBDO.png";
         iconYutTextName[6]="images/none.png";
-
-        iconYutText = new ImageIcon[7];
+*/
+        /*iconYutText = new ImageIcon[7];
         for(int i=0; i<7; i++)
             iconYutText[i]= new ImageIcon(iconYutTextName[i]);
-
+*/
     }//constructor
 
     /////////////////////////
@@ -243,8 +250,99 @@ public class InGameData {
         return false;
     }
 
+    /*setPawn coordinates and setlocatio method*/
+    public void setPawnCoordinates()
+    {
+        leftPawnWaiting = new Point[4];
+        leftPawnWaiting[0] = new Point(10,410);
+        leftPawnWaiting[1] = new Point(110,410);
+        leftPawnWaiting[2] = new Point(10,510);
+        leftPawnWaiting[3] = new Point(110,510);
 
+        rightPawnWaiting = new Point[4];
+        rightPawnWaiting[0] = new Point(811,410);
+        rightPawnWaiting[1] = new Point(911,410);
+        rightPawnWaiting[2] = new Point(811,510);
+        rightPawnWaiting[3] = new Point(911,510);
 
+        for(int i=0;i<4;i++) leftPlayer.pawns[i].setLocation(leftPawnWaiting[i]);
+        for(int i=0;i<4;i++) rightPlayer.pawns[i].setLocation(rightPawnWaiting[i]);
+
+    }
+
+    public void setBoardRoadIndex()
+    {
+        int x, y;
+        boardIndexer = new BoardIndexData[30];
+        boardIndexer[0] = new BoardIndexData(0,0,0,false,0);
+        boardIndexer[5] = new BoardIndexData(697,32,5,true,26);
+        boardIndexer[10] = new BoardIndexData(237,35,10,true,21);
+        boardIndexer[15] = new BoardIndexData(237,490,15,false,0);
+        boardIndexer[20] = new BoardIndexData(699,496,20,false,0);
+        x = 697; y = 400;
+        for(int i=1;i<=4;i++, y-=90) boardIndexer[i] = new BoardIndexData(x, y, i,false, 0);
+        x = 601; y = 32;
+        for(int i=6;i<=9;i++, x-=90) boardIndexer[i] = new BoardIndexData(x, y, i,false, 0);
+        x = 237; y = 129;
+        for(int i=11;i<=14;i++, y+=90) boardIndexer[i] = new BoardIndexData(x, y, i,false, 0);
+        x = 332; y = 493;
+        for(int i=16;i<=19;i++, x+=90) boardIndexer[i] = new BoardIndexData(x, y, i,false, 0);
+
+        //지름길 인덱스 (왼쪽위 -> 오른쪽 아래, 중간 지점 인덱스 포함)
+        boardIndexer[21] = new BoardIndexData(323, 123,21,false,0);
+        boardIndexer[22] = new BoardIndexData(388, 188,22,false,0);
+        boardIndexer[23] = new BoardIndexData(468, 263,23,true,24);
+        boardIndexer[24] = new BoardIndexData(542, 343,24,false,0);
+        boardIndexer[25] = new BoardIndexData(607, 408,25,false,0);
+        //지름길 인덱스 (오른쪽위 -> 왼쪽아래, 중간 지점 인덱스 제외)
+        boardIndexer[26] = new BoardIndexData(607, 123,26,false,0);
+        boardIndexer[27] = new BoardIndexData(542, 188,27,false,0);
+        boardIndexer[28] = new BoardIndexData(388, 343,28,false,0);
+        boardIndexer[29] = new BoardIndexData(323, 408,29,false,0);
+
+        //set exceptional index
+        boardIndexer[0].nextIndex = 0;
+        boardIndexer[1].prevIndex = 20;
+        boardIndexer[21].prevIndex = 10;
+        boardIndexer[23].nextIndex = 28;
+        boardIndexer[26].prevIndex = 5;
+        boardIndexer[25].nextIndex = 20;
+        boardIndexer[27].nextIndex = 23;
+        boardIndexer[28].prevIndex = 23;
+        boardIndexer[29].nextIndex = 15;
+        boardIndexer[20].nextIndex = 0;
+    }
+
+    public void makePlayer()
+    {
+        //make player
+        leftPlayer = new Player("images/left_pawn.png", 80, 80);
+        rightPlayer = new Player("images/right_pawn.png",100,75);
+
+        //set player's Image
+        leftPlayer.iconPlayer[0]= new ImageIcon("images/Left_move.gif");
+        leftPlayer.iconPlayer[1]= new ImageIcon("images/Left_stop.png");
+
+        rightPlayer.iconPlayer[0] = new ImageIcon("images/Right_move.gif");
+        rightPlayer.iconPlayer[1] = new ImageIcon("images/Right_stop.png");
+
+    }
+    public void setYutTextImage()
+    {
+        //set Yut Text Image
+        String[] iconYutTextName = new String[7];
+        iconYutTextName[0]="images/imgDO.png";
+        iconYutTextName[1]="images/imgGAE.png";
+        iconYutTextName[2]="images/imgGIRL.png";
+        iconYutTextName[3]="images/imgYUT.png";
+        iconYutTextName[4]="images/imgMO.png";
+        iconYutTextName[5]="images/imgBDO.png";
+        iconYutTextName[6]="images/none.png";
+
+        iconYutText = new ImageIcon[7];
+        for(int i=0; i<7; i++)
+            iconYutText[i]= new ImageIcon(iconYutTextName[i]);
+    }
     //초기화 메소드
     public void InGameData_init(){
 
