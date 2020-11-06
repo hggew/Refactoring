@@ -43,7 +43,6 @@ public class InGameData {
         /*
         leftPlayer.iconPlayer[0]= new ImageIcon("images/Left_move.gif");
         leftPlayer.iconPlayer[1]= new ImageIcon("images/Left_stop.png");
-
         rightPlayer.iconPlayer[0] = new ImageIcon("images/Right_move.gif");
         rightPlayer.iconPlayer[1] = new ImageIcon("images/Right_stop.png");
 */
@@ -60,7 +59,6 @@ public class InGameData {
         rightPawnWaiting[1] = new Point(911,410);
         rightPawnWaiting[2] = new Point(811,510);
         rightPawnWaiting[3] = new Point(911,510);
-
         for(int i=0;i<4;i++) leftPlayer.pawns[i].setLocation(leftPawnWaiting[i]);
         for(int i=0;i<4;i++) rightPlayer.pawns[i].setLocation(rightPawnWaiting[i]);*/
 
@@ -81,7 +79,6 @@ public class InGameData {
         for(int i=11;i<=14;i++, y+=90) boardIndexer[i] = new BoardIndexData(x, y, i,false, 0);
         x = 332; y = 493;
         for(int i=16;i<=19;i++, x+=90) boardIndexer[i] = new BoardIndexData(x, y, i,false, 0);
-
         //지름길 인덱스 (왼쪽위 -> 오른쪽 아래, 중간 지점 인덱스 포함)
         boardIndexer[21] = new BoardIndexData(323, 123,21,false,0);
         boardIndexer[22] = new BoardIndexData(388, 188,22,false,0);
@@ -93,7 +90,6 @@ public class InGameData {
         boardIndexer[27] = new BoardIndexData(542, 188,27,false,0);
         boardIndexer[28] = new BoardIndexData(388, 343,28,false,0);
         boardIndexer[29] = new BoardIndexData(323, 408,29,false,0);
-
         //set exceptional index
         boardIndexer[0].nextIndex = 0;
         boardIndexer[1].prevIndex = 20;
@@ -146,14 +142,14 @@ public class InGameData {
                         data.preview.setIndex(boardIndexer[data.preview.getCurrentIndex()].nextIndex);
                     break;
                 }
-            //23번(중앙)을 지날 때 일반적으로 왼쪽 아래방향으로 가도록  설정돼있기 때문에 23번을 오른쪽 아래방향으로 지나는 경우 인덱스를 직접 설정해준다
-            //이에 해당하는 케이스가 10, 21, 22번
+                //23번(중앙)을 지날 때 일반적으로 왼쪽 아래방향으로 가도록  설정돼있기 때문에 23번을 오른쪽 아래방향으로 지나는 경우 인덱스를 직접 설정해준다
+                //이에 해당하는 케이스가 10, 21, 22번
             case 10:    //왼쪽 상단 모서리
                 if(data.result == 6)    //빽도인 경우
                     data.preview.setIndex(boardIndexer[focusedPawn.getCurrentIndex()].prevIndex);
                 else    //지름길 방향으로 위치 설정
                     data.preview.setIndex(21 + data.result - 1);
-                    break;
+                break;
             case 21:
                 if(data.result == 6)    //빽도인 경우 뒤로 한칸
                     data.preview.setIndex(boardIndexer[focusedPawn.getCurrentIndex()].prevIndex);
@@ -201,15 +197,15 @@ public class InGameData {
     }
 
     public boolean moveOnePawn(Player owner, Pawn p, int end){  //플레이어의 말 하나를 지정된 위치로 이동하는 메소드
-            p.setIndex(boardIndexer[end].currentIndex);//칸 인덱스 갱신
-            if (boardIndexer[end].currentIndex == 0) {  //골인지점을 지나는 경우
-                goWaitingRoom(p, owner);    //대기칸으로 말을 보낸다
-                p.setFinished(true);    //말의 완주 여부 설정
-                activatedPlayer.score++;    //플레이어의 점수 변경
-            }//완주시 대기실로 이동
-            else p.setBounds(boardIndexer[boardIndexer[end].currentIndex].p.x,boardIndexer[boardIndexer[end].currentIndex].p.y,focusedPawn.getWidth(),focusedPawn.getHeight()); //인덱스에 맞춰서 좌표 이동
+        p.setIndex(boardIndexer[end].currentIndex);//칸 인덱스 갱신
+        if (boardIndexer[end].currentIndex == 0) {  //골인지점을 지나는 경우
+            goWaitingRoom(p, owner);    //대기칸으로 말을 보낸다
+            p.setFinished(true);    //말의 완주 여부 설정
+            activatedPlayer.score++;    //플레이어의 점수 변경
+        }//완주시 대기실로 이동
+        else p.setBounds(boardIndexer[boardIndexer[end].currentIndex].p.x,boardIndexer[boardIndexer[end].currentIndex].p.y,focusedPawn.getWidth(),focusedPawn.getHeight()); //인덱스에 맞춰서 좌표 이동
 
-            return catchOpponentPawns(owner == leftPlayer ? rightPlayer : leftPlayer, boardIndexer[end]);   //도착한 위치에서 상대의 말을 잡았는지 여부 반환
+        return catchOpponentPawns(owner == leftPlayer ? rightPlayer : leftPlayer, boardIndexer[end]);   //도착한 위치에서 상대의 말을 잡았는지 여부 반환
     }
 
     public void goWaitingRoom(Pawn pawn, Player owner) {    //말을 대기칸 좌표로 이동시키는 메소드
