@@ -31,38 +31,79 @@ public class RankPanel extends JPanel {
         add(btnMenu);
 
         //패널 이름 생성
-        lblTitle = new JLabel("Rank");
-        lblTitle.setBounds(50, 30, 200, 120);
-        lblTitle.setFont(new Font("OCR A Extended",Font.BOLD,50));
-        lblTitle.setVisible(true);
-        add(lblTitle);
+//        lblTitle = new JLabel("Rank");
+//        lblTitle.setBounds(50, 30, 200, 120);
+//        lblTitle.setFont(new Font("OCR A Extended",Font.BOLD,50));
+//        lblTitle.setVisible(true);
+//        add(lblTitle);
+        makeLblTitle();
 
-        lblId = new JLabel("ID");
-        lblId.setBounds(220, 130, 600, 120);
-        lblId.setFont(new Font("OCR A Extended",Font.BOLD,40));
-        lblId.setVisible(true);
-        add(lblId);
+//        lblId = new JLabel("ID");
+//        lblId.setBounds(220, 130, 600, 120);
+//        lblId.setFont(new Font("OCR A Extended",Font.BOLD,40));
+//        lblId.setVisible(true);
+//        add(lblId);
+        makeLblId();
 
-        lblCntWin = new JLabel("Win");
-        lblCntWin.setBounds(700, 130, 600, 120);
-        lblCntWin.setFont(new Font("OCR A Extended",Font.BOLD,40));
-        lblCntWin.setVisible(true);
-        add(lblCntWin);
+//        lblCntWin = new JLabel("Win");
+//        lblCntWin.setBounds(700, 130, 600, 120);
+//        lblCntWin.setFont(new Font("OCR A Extended",Font.BOLD,40));
+//        lblCntWin.setVisible(true);
+//        add(lblCntWin);
+        makeLblCntWin();
 
-        txtRank = new JTextArea();
-        txtRank.setBounds(100, 250, 800, 450);
-        Border lineBorder = BorderFactory.createLineBorder(Color.black, 3);                  //외곽선 설정
-        Border emptyBorder = BorderFactory.createEmptyBorder(7, 7, 7, 7);      //패딩 설정
-        txtRank.setBorder(BorderFactory.createCompoundBorder(lineBorder, emptyBorder));
-        txtRank.setFont(new Font("궁서체",Font.BOLD,40));
-        txtRank.setVisible(true);
-        txtRank.setEditable(false);         //편집 불가능 설정
-        add(txtRank);
+
+//        txtRank = new JTextArea();
+//        txtRank.setBounds(100, 250, 800, 450);
+//        Border lineBorder = BorderFactory.createLineBorder(Color.black, 3);                  //외곽선 설정
+//        Border emptyBorder = BorderFactory.createEmptyBorder(7, 7, 7, 7);      //패딩 설정
+//        txtRank.setBorder(BorderFactory.createCompoundBorder(lineBorder, emptyBorder));
+//        txtRank.setFont(new Font("궁서체",Font.BOLD,40));
+//        txtRank.setVisible(true);
+//        txtRank.setEditable(false);         //편집 불가능 설정
+//        add(txtRank);
+        txtRank=makeTxtRank();
 
         txtRank.setText(ShowRank());        //TextArea에 들어갈 내용 지정
 
     }//construct
 
+    public JLabel makeLabel(String title, int fontsize){
+        JLabel lbl = new JLabel(title);
+        lbl.setFont(new Font("OCR A Extended",Font.BOLD,fontsize));
+        lbl.setVisible(true);
+        add(lbl);
+        return lbl;
+    }
+
+    public void makeLblTitle(){
+        lblTitle=makeLabel("Rank", 50);
+        lblTitle.setBounds(50, 30, 200, 120);
+    }
+
+    public void makeLblCntWin(){
+        lblCntWin= makeLabel("Win", 40);
+        lblCntWin.setBounds(700, 130, 600, 120);
+    }
+    public void makeLblId(){
+        lblId = makeLabel("ID", 40);
+        lblId.setBounds(220, 130, 600, 120);
+    }
+
+
+    public JTextArea makeTxtRank(){
+        JTextArea txtArea;
+        txtArea = new JTextArea();
+        txtArea.setBounds(100, 250, 800, 450);
+        Border lineBorder = BorderFactory.createLineBorder(Color.black, 3);                  //외곽선 설정
+        Border emptyBorder = BorderFactory.createEmptyBorder(7, 7, 7, 7);      //패딩 설정
+        txtArea.setBorder(BorderFactory.createCompoundBorder(lineBorder, emptyBorder));
+        txtArea.setFont(new Font("궁서체",Font.BOLD,40));
+        txtArea.setVisible(true);
+        txtArea.setEditable(false);         //편집 불가능 설정
+        add(txtArea);
+        return  txtArea;
+    }
 
 
     //메소드
@@ -83,7 +124,7 @@ public class RankPanel extends JPanel {
 
 
     //DB에서 받아온 결과값을 TextArea에 들어갈 String으로 변경
-    private static String getRankList(ResultSet rs) throws SQLException, ClassNotFoundException {
+    private static String getRankList(ResultSet rs) throws SQLException {
         System.out.println("getRankList");
 
         String txtResult="";
