@@ -67,9 +67,6 @@ public class InGameView extends JPanel {
 //        btnThrowLeft.setFocusPainted(false);   //선택시 테두리 사용x
 //        btnThrowLeft.setBackground(new Color(225,213,191));
 //        add(btnThrowLeft);
-        btnThrowLeft=makeBtnThrow("left");
-        btnThrowRight=makeBtnThrow("right");
-
         //오른쪽 플레이어의 윷 던지기 버튼 생성, 패널에 붙이기
 //        btnThrowRight = new JButton("Throw Yut");
 //        btnThrowRight.setBounds(800,599,200,200);
@@ -79,6 +76,8 @@ public class InGameView extends JPanel {
 //        btnThrowRight.setFocusPainted(false);   //선택시 테두리 사용x
 //        btnThrowRight.setBackground(new Color(225,213,191));
 //        add(btnThrowRight);
+        btnThrowLeft=makeBtnThrow("left");
+        btnThrowRight=makeBtnThrow("right");
 
 
         //윷 클래스 생성, 패널에 붙이기
@@ -121,7 +120,7 @@ public class InGameView extends JPanel {
     public JButton makeBtnThrow( String dir ){
         JButton btnThrow = new JButton("Throw YUT");
         int x;
-        if(dir=="left") x= 0;
+        if(dir.equals("left")) x= 0;
         else x=800;
 
         btnThrow.setBounds(x,599, 200,200);
