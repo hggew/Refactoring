@@ -3,7 +3,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
-import java.util.Scanner;
 
 public class InGameController {
 
@@ -28,8 +27,8 @@ public class InGameController {
 
 
         //던지기 버튼에 리스너 넣기
-        _view.leftThrowBtn.addActionListener(new ThrowingYut());
-        _view.rightThrowBtn.addActionListener(new ThrowingYut());
+        _view.btnThrowLeft.addActionListener(new ThrowingYut());
+        _view.btnThrowRight.addActionListener(new ThrowingYut());
 
 
         //능력 버튼에 리스너 넣기
@@ -102,12 +101,7 @@ public class InGameController {
 //                JOptionPane dialog = new JOptionPane();
                 int result = JOptionPane.showConfirmDialog( _view, str,"Game End",JOptionPane.YES_NO_OPTION);   //게임을 계속 진행할 지  묻기
 
-                _inputinfo = new InputInfo();
-                _inputinfo.setTitle("Input ID");
-                _inputinfo.setLocation(0,0);
-                _inputinfo.setSize(1000,800);
-                _inputinfo.setVisible(true);
-                _inputinfo.setResizable(true);
+                makeInputinfoFrame();
                 switch(result) {
                     case JOptionPane.NO_OPTION:
                         _inputinfo.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -127,7 +121,7 @@ public class InGameController {
 //                        frame1.setVisible(true);
 //                        frame1.setResizable(true);
 
-                    default:
+//                    default:
                         for(Pawn pawn:_data.activatedPlayer.pawns)
                             pawn.removeMouseListener(_data.activatedPlayer == _data.leftPlayer ? leftPawnListener : rightPawnListener);
 
@@ -191,13 +185,12 @@ public class InGameController {
     }
 
     public void makeInputinfoFrame(){
-        InputInfo frame = new InputInfo();
-
-        frame.setTitle("Input ID");
-        frame.setLocation(0,0);
-        frame.setSize(1000,800);
-        frame.setVisible(true);
-        frame.setResizable(true);
+        _inputinfo = new InputInfo();
+        _inputinfo.setTitle("Input ID");
+        _inputinfo.setLocation(0,0);
+        _inputinfo.setSize(1000,800);
+        _inputinfo.setVisible(true);
+        _inputinfo.setResizable(true);
     }
 
     private class ThrowingYut implements ActionListener {   //윷 던지기 버튼을 누르면 발생하는 이벤트 리스너
@@ -205,13 +198,13 @@ public class InGameController {
         public void actionPerformed(ActionEvent e) {
             JButton btn = (JButton) e.getSource();
             //본인 턴이 아닐 때 버튼이 눌리면 무시
-            if ((_data.leftPlayer.isMyTurn && btn == _view.rightThrowBtn) || (_data.rightPlayer.isMyTurn && btn == _view.leftThrowBtn))
+            if ((_data.leftPlayer.isMyTurn && btn == _view.btnThrowRight) || (_data.rightPlayer.isMyTurn && btn == _view.btnThrowLeft))
                 return;
 
             //상태
             if(_data.activatedPlayer.isNowAbility1Use==true)    //윷 결과 조작 능력 사용
                 _data.activatedPlayer.isNowAbility1Use=false;
-            //상태
+                //상태
             else{   //윷 결과 랜덤으로 뽑기
 
 //                YutResult = Math.random();
@@ -296,7 +289,7 @@ public class InGameController {
 
         @Override
         public void actionPerformed(ActionEvent e) {
-           Object obj = e.getSource();
+            Object obj = e.getSource();
             //어느 플레이어가 어떤 버튼을 눌렀는지 확인 후 능력 사용
             if(obj ==_view.leftUserPanel.btnAbility1)
             {
@@ -328,8 +321,8 @@ public class InGameController {
 //            p.removeMouseListener(_data.activatedPlayer == _data.leftPlayer ? leftPawnListener : rightPawnListener);
 
         //양 플레이어의 던지기 버튼 비활성화
-        _view.leftThrowBtn.setEnabled(false);
-        _view.rightThrowBtn.setEnabled(false);
+        _view.btnThrowLeft.setEnabled(false);
+        _view.btnThrowRight.setEnabled(false);
     }//init_Game()
 
 
@@ -358,8 +351,8 @@ public class InGameController {
     }
 
     public void ready(Player player){   //던지기 버튼을 누를 수 있도록 활성화 하는 메소드
-        if(player == _data.leftPlayer) GameManager.getInstance().get_inGame().leftThrowBtn.setEnabled(true);
-        else if(player == _data.rightPlayer) GameManager.getInstance().get_inGame().rightThrowBtn.setEnabled(true);
+        if(player == _data.leftPlayer) GameManager.getInstance().get_inGame().btnThrowLeft.setEnabled(true);
+        else if(player == _data.rightPlayer) GameManager.getInstance().get_inGame().btnThrowRight.setEnabled(true);
         _data.throwableNCnt = 1;
     }
 
