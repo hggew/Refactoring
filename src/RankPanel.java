@@ -68,6 +68,11 @@ public class RankPanel extends JPanel {
 
     }//construct
 
+    public void initRank() throws SQLException, ClassNotFoundException {
+        txtRank.setText("");
+        txtRank.setText(ShowRank());
+    }
+
     public JLabel makeLabel(String title, int fontsize){
         JLabel lbl = new JLabel(title);
         lbl.setFont(new Font("OCR A Extended",Font.BOLD,fontsize));
