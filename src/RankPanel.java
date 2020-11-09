@@ -63,15 +63,15 @@ public class RankPanel extends JPanel {
 //        txtRank.setEditable(false);         //편집 불가능 설정
 //        add(txtRank);
         txtRank=makeTxtRank();
-
-        txtRank.setText(ShowRank());        //TextArea에 들어갈 내용 지정
+        ShowRank();
+//        txtRank.setText(ShowRank());        //TextArea에 들어갈 내용 지정
 
     }//construct
 
-    public void initRank() throws SQLException, ClassNotFoundException {
-        txtRank.setText("");
-        txtRank.setText(ShowRank());
-    }
+//    public void initRank() throws SQLException, ClassNotFoundException {
+//        txtRank.setText("");
+////        txtRank.setText(ShowRank());
+//    }
 
     public JLabel makeLabel(String title, int fontsize){
         JLabel lbl = new JLabel(title);
@@ -112,14 +112,15 @@ public class RankPanel extends JPanel {
 
 
     //메소드
-    public static String ShowRank() throws SQLException, ClassNotFoundException {
+    public void ShowRank() throws SQLException, ClassNotFoundException {
         System.out.println("show rank");
 
         String selectStmt = "select * from ranking order by cnt_win DESC, name ASC limit 8;" ;
         try {
             //rsMain에 select문을 실행해서 받은 결과값 저장
             ResultSet rsMain = Database.dbExecuteQuery(selectStmt);
-            return getRankList(rsMain);
+//            return getRankList(rsMain);
+            txtRank.setText(getRankList(rsMain));
         }
         catch (SQLException e) {
             System.out.println("Show Rank ERROR " + e);
