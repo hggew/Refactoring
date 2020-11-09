@@ -3,7 +3,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.sql.Statement;
 import javax.swing.*;
 
@@ -94,6 +93,9 @@ public class InputInfo extends JFrame {
                 }
                 System.out.println("Input success");
                 btn.setEnabled(false);
+
+                //rank panel 다시 불러오기
+                GameManager.getInstance().get_rank().initRank();
 
             }catch (Exception e1) {
                 System.out.println("Input fail");
