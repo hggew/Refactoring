@@ -13,6 +13,7 @@ public class InputInfo extends JFrame {
     Statement stmt;
     ResultSet rs;
 
+
     public InputInfo()
     {
 
