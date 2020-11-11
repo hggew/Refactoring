@@ -36,11 +36,11 @@ public class InGameData {
         previewPawns = new ArrayList<ThrowData>();  //던지기 결과 리스트 생성
 
         //플레이어 움직이는 사진지정
-        leftPlayer.iconPalyer[0]= new ImageIcon("images/Left_move.gif");
-        leftPlayer.iconPalyer[1]= new ImageIcon("images/Left_stop.png");
+        leftPlayer.iconPlayer[0]= new ImageIcon("images/Left_move.gif");
+        leftPlayer.iconPlayer[1]= new ImageIcon("images/Left_stop.png");
 
-        rightPlayer.iconPalyer[0] = new ImageIcon("images/Right_move.gif");
-        rightPlayer.iconPalyer[1] = new ImageIcon("images/Right_stop.png");
+        rightPlayer.iconPlayer[0] = new ImageIcon("images/Right_move.gif");
+        rightPlayer.iconPlayer[1] = new ImageIcon("images/Right_stop.png");
 
         //각 플레이어 말들의 대기 칸 좌표 미리 저장
         leftPawnWaiting = new Point[4];
