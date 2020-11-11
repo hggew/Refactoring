@@ -62,49 +62,35 @@ public class MainPanel extends JPanel{
     //메소드 - 각 패널을 MainPanel에 보여주는 메소드. setVisible을 사용함.
     //메뉴패널을 보여주는 메소드. 생성자에서 사용
     public void showMenu(){
-        showPanel(true,false,false,false);
-//        Menu.setVisible(true);
-//        GameStart.setVisible(false);
-//        GameExplain.setVisible(false);
-//        Rank.setVisible(false);
+        Menu.setVisible(true);
+        GameStart.setVisible(false);
+        GameExplain.setVisible(false);
+        Rank.setVisible(false);
     }
 
     //게임뷰를 보여주는 메소드.
     public void showInGame(){
-        showPanel(false,true,false,false);
-//        Menu.setVisible(false);
-//        GameStart.setVisible(true);
-//        GameExplain.setVisible(false);
-//        Rank.setVisible(false);
+        Menu.setVisible(false);
+        GameStart.setVisible(true);
+        GameExplain.setVisible(false);
+        Rank.setVisible(false);
     }//게임시작
 
     //explainpanel을 보여주는 메소드
     public void showExplain(){
-        showPanel(false,false,true,false);
-//        Menu.setVisible(false);
-//        GameStart.setVisible(false);
-//        GameExplain.setVisible(true);
-//        Rank.setVisible(false);
+        Menu.setVisible(false);
+        GameStart.setVisible(false);
+        GameExplain.setVisible(true);
+        Rank.setVisible(false);
     }//게임방법
 
     //rankpanel을 보여주는 메소드
     public void showRank(){
-        showPanel(false,false,false,true);
-//        Menu.setVisible(false);
-//        GameStart.setVisible(false);
-//        GameExplain.setVisible(false);
-//        Rank.setVisible(true);
+        Menu.setVisible(false);
+        GameStart.setVisible(false);
+        GameExplain.setVisible(false);
+        Rank.setVisible(true);
     }
-
-    /* sun show method extract*/
-    public void showPanel(boolean menu,boolean gamestart,boolean gameexplain,boolean rank)
-    {
-        Menu.setVisible(menu);
-        GameStart.setVisible(gamestart);
-        GameExplain.setVisible(gameexplain);
-        Rank.setVisible(rank);
-    }
-
 
     //내부클래스 액션리스너
     private class MenuSelect implements ActionListener {
