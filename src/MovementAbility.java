@@ -1,10 +1,7 @@
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
-
 public class MovementAbility {
-
+//변수값(throwResult)을 지정하는 부분 set 메서드를 사용하도록 변경
+    //모 아니면 도
     public static class MoOrDo extends Ability{
-        //모 아니면 도
         int randomNum;
         @Override
         public void use() {
@@ -16,8 +13,8 @@ public class MovementAbility {
         }
     }
 
+    //개 아니면 걸
     public static class GaeOrGirl extends Ability{
-        //개 아니면 걸
         int randomNum;
         @Override
         public void use() {
@@ -29,8 +26,8 @@ public class MovementAbility {
         }
     }
 
+    //던지면 무조건 윷
     public static class OnlyYut extends Ability{
-        //던지면 무조건 윷
         @Override
         public void use(){
             _data.activatedPlayer.isNowAbility1Use=true;

@@ -11,7 +11,7 @@ public class InGameController {
     private PawnClickListener leftPawnListener, rightPawnListener;
     private InputInfo _inputinfo;
 
-    /*field mowe to randomYutResult method*/
+    /*field move to randomYutResult method*/
     //private double YutResult;
 
     public InGameController() {

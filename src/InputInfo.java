@@ -70,7 +70,8 @@ public class InputInfo extends JFrame {
                 btn.setEnabled(false);
 
                 //rank panel 다시 불러오기
-                GameManager.getInstance().get_rank().initRank();
+ 
+                GameManager.getInstance().get_rank().ShowRank();
  
             }catch (Exception e1) {
                 System.out.println("Input fail");

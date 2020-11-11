@@ -2,8 +2,9 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
-
-//mainpanel과 explainpanel에서 사용할 마우스 이벤트 처리
+//ExplainPanelController, MainPanel, RankPanelController의
+// 마우스리스너, 액션리스너 부분을 통일하고 재정의해서 사용할 수 있도록 수정
+//mainpanel과 explainpanel, rankpanel에서 사용할 마우스 이벤트 처리
 public class btnMouseEvent implements MouseListener {
 
     @Override
