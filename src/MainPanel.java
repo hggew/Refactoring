@@ -56,41 +56,55 @@ public class MainPanel extends JPanel{
 
         //게임 시작시 메뉴패널보여주는 메소드 호출
         showMenu();
-      //  showInGame();
+        //  showInGame();
     }
 
     //메소드 - 각 패널을 MainPanel에 보여주는 메소드. setVisible을 사용함.
     //메뉴패널을 보여주는 메소드. 생성자에서 사용
     public void showMenu(){
-        Menu.setVisible(true);
-        GameStart.setVisible(false);
-        GameExplain.setVisible(false);
-        Rank.setVisible(false);
+        showPanel(true,false,false,false);
+//        Menu.setVisible(true);
+//        GameStart.setVisible(false);
+//        GameExplain.setVisible(false);
+//        Rank.setVisible(false);
     }
 
     //게임뷰를 보여주는 메소드.
     public void showInGame(){
-        Menu.setVisible(false);
-        GameStart.setVisible(true);
-        GameExplain.setVisible(false);
-        Rank.setVisible(false);
+        showPanel(false,true,false,false);
+//        Menu.setVisible(false);
+//        GameStart.setVisible(true);
+//        GameExplain.setVisible(false);
+//        Rank.setVisible(false);
     }//게임시작
 
     //explainpanel을 보여주는 메소드
     public void showExplain(){
-        Menu.setVisible(false);
-        GameStart.setVisible(false);
-        GameExplain.setVisible(true);
-        Rank.setVisible(false);
+        showPanel(false,false,true,false);
+//        Menu.setVisible(false);
+//        GameStart.setVisible(false);
+//        GameExplain.setVisible(true);
+//        Rank.setVisible(false);
     }//게임방법
 
     //rankpanel을 보여주는 메소드
     public void showRank(){
-        Menu.setVisible(false);
-        GameStart.setVisible(false);
-        GameExplain.setVisible(false);
-        Rank.setVisible(true);
+        showPanel(false,false,false,true);
+//        Menu.setVisible(false);
+//        GameStart.setVisible(false);
+//        GameExplain.setVisible(false);
+//        Rank.setVisible(true);
     }
+
+    /* sun show method extract*/
+    public void showPanel(boolean menu,boolean gamestart,boolean gameexplain,boolean rank)
+    {
+        Menu.setVisible(menu);
+        GameStart.setVisible(gamestart);
+        GameExplain.setVisible(gameexplain);
+        Rank.setVisible(rank);
+    }
+
 
     //내부클래스 액션리스너
     private class MenuSelect implements ActionListener {
