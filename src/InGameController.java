@@ -286,6 +286,7 @@ public class InGameController {
     //중복코드변경
     public void changePlayerImgnLabel(){   //진행중인 차례에 맞게 플레이어 이미지 바꾸는 메소드
 
+ 
     }
 
     public void ready(Player player){   //던지기 버튼을 누를 수 있도록 활성화 하는 메소드
