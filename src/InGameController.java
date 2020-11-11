@@ -11,7 +11,6 @@ public class InGameController {
     private PawnClickListener leftPawnListener, rightPawnListener;
     private InputInfo _inputinfo;
 
-    /*field move to randomYutResult method*/
     //private double YutResult;
 
     public InGameController() {
@@ -23,23 +22,22 @@ public class InGameController {
         leftPawnListener = new PawnClickListener();
         rightPawnListener = new PawnClickListener();
 
+
         //던지기 버튼에 리스너 넣기
         _view.btnThrowLeft.addActionListener(new ThrowingYut());
         _view.btnThrowRight.addActionListener(new ThrowingYut());
 
         //능력 버튼에 리스너 넣기
-        _view.leftUserPanel.btnAbility2.addActionListener(new UseAbility(_data.leftPlayer,1));
-        _view.leftUserPanel.btnAbility1.addActionListener(new UseAbility(_data.leftPlayer,0));
+        _view.leftUserPanel.btnAbility2.addActionListener(new UseAbility());
+        _view.leftUserPanel.btnAbility1.addActionListener(new UseAbility());
 
-        _view.rightUserPanel.btnAbility1.addActionListener(new UseAbility(_data.rightPlayer,0));
-        _view.rightUserPanel.btnAbility2.addActionListener(new UseAbility(_data.rightPlayer,1));
+        _view.rightUserPanel.btnAbility1.addActionListener(new UseAbility());
+        _view.rightUserPanel.btnAbility2.addActionListener(new UseAbility());
 
         //게임 초기화하며 시작
- 
-        init_Game();
+        initGame();
         changePlayerImgnLabel();
-        activeThrowBtn(_data.activatedPlayer);
- 
+        ready(_data.activatedPlayer);
 
     }
 
@@ -49,10 +47,13 @@ public class InGameController {
         public void mouseReleased(MouseEvent e) {
             _data.focusedPawn = (Pawn)e.getSource();    //이벤트가 발생한 말을 선택된 말로 설정
 
-            hideAllPreviews();  //우선 말의 미리보기 가리기
+            for(ThrowData data:_data.previewPawns){ //선택된 말에 대해 이동 가능한 위치를 보여주기 위해 저장된 윷 결과 데이터에 있는 미리보기 말 초기화
+                data.preview.setVisible(false); //이전에 보여지고있던 미리보기가 있는 경우에 대비해 미리보기 말들 모두 안보이게 하기
+            }
             showAllPreviews();  //현재 선택된 말을 기준으로 다시 미리보기 띄우기
             _view.repaint();
         }
+
 
         @Override
         public void mousePressed(MouseEvent e) {}
@@ -71,29 +72,22 @@ public class InGameController {
             Pawn p = (Pawn)e.getSource();
             boolean catched;
 
- 
             //말 이동
             if(_data.focusedPawn.getCurrentIndex()==0) catched = _data.moveOnePawn(_data.activatedPlayer, _data.focusedPawn, p.getCurrentIndex());  //대기칸에 있는 말을 이동하는 경우 그 말만 이동
             else catched = _data.moveAllPawns(_data.activatedPlayer,_data.focusedPawn.getCurrentIndex(),p.getCurrentIndex());   //윷판 위의 말을 이동하는 경우 그 말이 있는 위치의 모든 말을 이동
             for(ThrowData data:_data.previewPawns) data.preview.setVisible(false);  //말 이동 후 미리보기 모두 보이지 않게 하기
 
-            //78줄이랑 88줄이랑 같이 묶어서 메소드로 처리. 여기에서
             removeClickedPreview(p);
             _data.previewPawns.trimToSize();    //리스트 사이즈 갱신
 
             checkAllPawnFinished();
- 
-
 
             //게임이 계속 진행되는 경우
             if(catched) {   //말 이동 후 상대 말을 잡으면 윷을 던질 기회 획득
-                activeThrowBtn(_data.activatedPlayer);   //윷 던질 준비 시키기
-                //윷을 던지는 동안에는 말 이동시키지 못하도록 리스너 제거
+                ready(_data.activatedPlayer);   //윷 던질 준비 시키기
                 deactivationPawnClick();
             }
             else if(_data.previewPawns.size()==0) { //추가 턴을 획득하지 못하고 던진 윷 결과데이터들을 모두 사용한 경우
-                //말 선택 리스너 모두 제거
- 
                 deactivationPawnClick();
                 passPlayerTurn();   //상대에게 턴 넘겨주기
             }
@@ -104,11 +98,11 @@ public class InGameController {
                 for(ThrowData data:_data.previewPawns) {    //남은 결과값들 중 빽도가 아닌 것이 있는지 확인
                     if(data.result != 6) flag = false;
                 }
-                if(flag){   //결과 데이터들이 모두 빽도인 경우
+                if(flag == true){   //결과 데이터들이 모두 빽도인 경우
                     for(Pawn pawn:_data.activatedPlayer.pawns){ //움직일 수 있는 말이 있는지 확인
                         if(pawn.getCurrentIndex()!=0) flag = false;
                     }
-                    if(flag){   //게임판에 올라온 말이 없는 경우(빽도 이동이 가능한 말이 없는 경우)
+                    if(flag == true){   //게임판에 올라온 말이 없는 경우(빽도 이동이 가능한 말이 없는 경우)
                         //더이상 이동할 수 없으므로 턴 넘겨주기
                         deactivationPawnClick();
                         passPlayerTurn();
@@ -208,9 +202,12 @@ public class InGameController {
                 _data.throwableNCnt--;  //던질 수 있는 횟수 -1
 
             //모습
-
-            /*saveThrowResult 메서드 추출*/
-            saveThrowResult();//던진 결과 저장 - 미리보기용
+            //던진 결과 저장 - 미리보기용
+            ThrowData data = new ThrowData(_data.throwResult);
+            data.preview.addMouseListener(new MoveSelectedPawn());
+            _data.previewPawns.add(data);
+            _view.add(data.preview);
+            _view.setComponentZOrder(data.preview, 0);  //윷판보다 위에 보이도록 설정
 
             //상태
             //윷 던질 기회 모두 사용한 경우
@@ -220,28 +217,25 @@ public class InGameController {
                 for(ThrowData d:_data.previewPawns) {   //결과 데이터들 중 빽도가 아닌 것이 있는 지 확인
                     if(d.result != 6) flag = false;
                 }
- 
-                //결과들이 모두 빽도인 경우 말을 이동할 준비
                 for(Pawn pawn:_data.activatedPlayer.pawns){ //내 말 중 이동 가능한 말이 있는 지 확인
                     if(pawn.getCurrentIndex()!=0) flag = false;
                 }
-                if(flag){   //윷판에 올라온 말이 없는 경우(빽도 이동이 가능한 말이 없는 경우)
-                    //상대 턴으로 넘어가기
- 
+                if(flag){   //결과들이 모두 빽도인 경우 말을 이동할 준비
+                    // 윷판에 올라온 말이 없는 경우(빽도 이동이 가능한 말이 없는 경우)
+                        //상대 턴으로 넘어가기
                     deactivationPawnClick();
                     passPlayerTurn();
                     _data.previewPawns.clear();
                     _data.previewPawns.trimToSize();
                 }
-                else{   //이동할 말이 있다면 말 이동을 위한 준비
-                    //내 말 중 완주하지 않은 말에 말 선택 리스너를 add
-                    activationPawnClick();
-                }
-
- 
+                else {
+                    //말 이동 준비
+                    //내 말 중 완주하지 않은 말에 말 선택 리스너를  add
+                     activationPawnClick();
+                }   //else
             }   //if(다 던짐)
             else {  //던질 기회가 남았다면 다시 던질 준비
-                activeThrowBtn(_data.activatedPlayer);
+                ready(_data.activatedPlayer);
             }   //else
         }//actionPerformed()
     }
@@ -249,19 +243,26 @@ public class InGameController {
     //능력 버튼 클릭 시 발생하는 이벤트 리스너
     private class UseAbility implements ActionListener{
 
-        Player player;
-        int abilitynum;
-
-        public UseAbility(Player p, int num) {
-            player=p;
-            abilitynum=num;
-        }
-
         @Override
         public void actionPerformed(ActionEvent e) {
             Object obj = e.getSource();
             //어느 플레이어가 어떤 버튼을 눌렀는지 확인 후 능력 사용
-            player.abilities[abilitynum].run(player);
+            if(obj ==_view.leftUserPanel.btnAbility1)
+            {
+                _data.leftPlayer.abilities[0].run(_data.leftPlayer);
+            }
+            else if(obj ==_view.leftUserPanel.btnAbility2)
+            {
+                _data.leftPlayer.abilities[1].run(_data.leftPlayer);
+            }
+            else if(obj ==_view.rightUserPanel.btnAbility1)
+            {
+                _data.rightPlayer.abilities[0].run(_data.rightPlayer);
+            }
+            else if(obj ==_view.rightUserPanel.btnAbility2)
+            {
+                _data.rightPlayer.abilities[1].run(_data.rightPlayer);
+            }
             _view.repaint();
         }
     }
@@ -278,23 +279,12 @@ public class InGameController {
         _view.btnThrowRight.setEnabled(false);
     }//init_Game()
 
-  
+    //중복코드변경
     public void changePlayerImgnLabel(){   //진행중인 차례에 맞게 플레이어 이미지 바꾸는 메소드
 
-        Player activedPlayer = _data.activatedPlayer == _data.leftPlayer ? _data.leftPlayer: _data.rightPlayer ;
-        Player deactivedPlayer = _data.activatedPlayer == _data.leftPlayer ? _data.rightPlayer: _data.leftPlayer;
-
-        activedPlayer.imgPlayer.setIcon(activedPlayer.iconPlayer[0]);
-        activedPlayer.imgPlayer.setBounds(-25,90,250,230);
-        deactivedPlayer.imgPlayer.setIcon(deactivedPlayer.iconPlayer[1]);
-        deactivedPlayer.imgPlayer.setBounds(-1,90,250,230);
-
-        activedPlayer.lblTurn.setVisible(true);
-        deactivedPlayer.lblTurn.setVisible(false);
- 
     }
 
-    public void activeThrowBtn(Player player){   //던지기 버튼을 누를 수 있도록 활성화 하는 메소드
+    public void ready(Player player){   //던지기 버튼을 누를 수 있도록 활성화 하는 메소드
         if(player == _data.leftPlayer) GameManager.getInstance().get_inGame().btnThrowLeft.setEnabled(true);
         else if(player == _data.rightPlayer) GameManager.getInstance().get_inGame().btnThrowRight.setEnabled(true);
         _data.throwableNCnt = 1;
@@ -309,9 +299,7 @@ public class InGameController {
         _view.lblYutResult.setIcon(_data.iconYutText[6]);   //윷 결과 지우기
 
         changePlayerImgnLabel();   //플레이어 이미지와 라벨 변경
- 
-        activeThrowBtn(_data.activatedPlayer);   //던지기 버튼 활성화
- 
+        ready(_data.activatedPlayer);   //던지기 버튼 활성화
     }
 
     public void showAllPreviews(){  //선택된 말이 이동할 수 있는 경우를 모두 보여주는 메소드
@@ -337,11 +325,6 @@ public class InGameController {
         return 0;
     }
 
-    public void hideAllPreviews(){
-        for(ThrowData data:_data.previewPawns){ //선택된 말에 대해 이동 가능한 위치를 보여주기 위해 저장된 윷 결과 데이터에 있는 미리보기 말 초기화
-            data.preview.setVisible(false); //미리보기 말들 모두 안보이게 하기
-        }
-    }
 
     public void activationPawnClick(){
         for (Pawn P : _data.activatedPlayer.pawns)
@@ -355,14 +338,5 @@ public class InGameController {
             pawn.removeMouseListener(_data.activatedPlayer == _data.leftPlayer ? leftPawnListener : rightPawnListener);
     }
 
-    public void saveThrowResult()//던진 결과 저장 - 미리보기용
-    {
-        ThrowData data = new ThrowData(_data.throwResult);
-        data.preview.addMouseListener(new MoveSelectedPawn());
-        _data.previewPawns.add(data);
-        _view.add(data.preview);
-        _view.setComponentZOrder(data.preview, 0);  //윷판보다 위에 보이도록 설정
-
-    }
 }
 //test
