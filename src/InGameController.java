@@ -84,38 +84,7 @@ public class InGameController {
             removeClickedPreview(p);
             _data.previewPawns.trimToSize();    //리스트 사이즈 갱신
 
-            //현재 플레이어의 말이 전부 완주하면 game end -> 대화상자
-            if(_data.activatedPlayer.score ==4){    //말 4개가 모두 완주
-                //스트링 다시 설정 "left"+str 이정도로
-                String str;
-                //승자에 따라 메시지 설정
-                if(_data.activatedPlayer== _data.leftPlayer) str="Left Player Win!! \n Do you want new Game?" ;
-                else str= "Right Player Win!! \n Do you want new Game?";
-
-                int result = JOptionPane.showConfirmDialog( _view, str,"Game End",JOptionPane.YES_NO_OPTION);   //게임을 계속 진행할 지  묻기
-
-                makeInputinfoFrame();
-                switch(result) {
-                    case JOptionPane.NO_OPTION:
-                        _inputinfo.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-                        break;
-
-                    case JOptionPane.YES_OPTION:
-                        deactivationPawnClick();
- 
-                        if( _data.activatedPlayer == _data.rightPlayer) passPlayerTurn();
-                        ready(_data.leftPlayer);
-                        _data.InGameData_init();
-                        _data.previewPawns.clear();
-                        _data.previewPawns.trimToSize();
-
-                        _view.lblThrowing.setIcon(_view.lblThrowing.iconYut[0]);
-                        _view.lblYutResult.setIcon(_data.iconYutText[6]);
-
-                        GameManager.getInstance().get_view().showMenu();
-                        return;
-                } // switch
-            }
+            checkAllPawnFinished();
 
             //게임이 계속 진행되는 경우
             if(catched) {   //말 이동 후 상대 말을 잡으면 윷을 던질 기회 획득
@@ -156,6 +125,40 @@ public class InGameController {
 
             _data.previewPawns.remove(clicked); //결과 데이터의 리스트에서 방금 사용된 결과 데이터를 삭제
 
+        }
+
+        void checkAllPawnFinished(){
+            //현재 플레이어의 말이 전부 완주하면 game end -> 대화상자
+            if(_data.activatedPlayer.score ==4){    //말 4개가 모두 완주
+                String str = "Player Win!!\nDo you want new Game?";;
+                //승자에 따라 메시지 설정
+                if(_data.activatedPlayer== _data.leftPlayer) str="left" + str;
+                else str= "right"+str ;
+
+                int result = JOptionPane.showConfirmDialog( _view, str,"Game End",JOptionPane.YES_NO_OPTION);   //게임을 계속 진행할 지  묻기
+
+                makeInputinfoFrame();
+                switch(result) {
+                    case JOptionPane.NO_OPTION:
+                        _inputinfo.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+                        break;
+
+                    case JOptionPane.YES_OPTION:
+                        deactivationPawnClick();
+
+                        if( _data.activatedPlayer == _data.rightPlayer) passPlayerTurn();
+                        ready(_data.leftPlayer);
+                        _data.InGameData_init();
+                        _data.previewPawns.clear();
+                        _data.previewPawns.trimToSize();
+
+                        _view.lblThrowing.setIcon(_view.lblThrowing.iconYut[0]);
+                        _view.lblYutResult.setIcon(_data.iconYutText[6]);
+
+                        GameManager.getInstance().get_view().showMenu();
+                        return;
+                } // switch
+            }
         }
 
 
