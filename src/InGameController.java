@@ -19,8 +19,6 @@ public class InGameController {
         _view = GameManager.getInstance().get_inGame();         // InGameView 받아오기
         _data = GameManager.getInstance().get_gameData();     //   데이터 받아오기
 
-//        _inputinfo = GameManager.getInstance().get_inputinfo();
-
         //각 플레이어의 폰 선택 리스터 생성
         leftPawnListener = new PawnClickListener();
         rightPawnListener = new PawnClickListener();
@@ -30,7 +28,6 @@ public class InGameController {
         _view.btnThrowLeft.addActionListener(new ThrowingYut());
         _view.btnThrowRight.addActionListener(new ThrowingYut());
 
-
         //능력 버튼에 리스너 넣기
         _view.leftUserPanel.btnAbility2.addActionListener(new UseAbility());
         _view.leftUserPanel.btnAbility1.addActionListener(new UseAbility());
@@ -39,8 +36,8 @@ public class InGameController {
         _view.rightUserPanel.btnAbility2.addActionListener(new UseAbility());
 
         //게임 초기화하며 시작
-        init_Game();
-        change_playerImgnLabel();
+        initGame();
+        changePlayerImgnLabel();
         ready(_data.activatedPlayer);
 
     }
@@ -74,56 +71,36 @@ public class InGameController {
         @Override
         public void mouseReleased(MouseEvent e) {
             Pawn p = (Pawn)e.getSource();
-            ThrowData clicked = null;
             boolean catched;
 
 
-            for(ThrowData data:_data.previewPawns){ //결과 데이터에서 이벤트가 발생한 미리보기 말 찾기
-                if(data.preview == p) clicked = data;
-            }
 
             //말 이동
             if(_data.focusedPawn.getCurrentIndex()==0) catched = _data.moveOnePawn(_data.activatedPlayer, _data.focusedPawn, p.getCurrentIndex());  //대기칸에 있는 말을 이동하는 경우 그 말만 이동
             else catched = _data.moveAllPawns(_data.activatedPlayer,_data.focusedPawn.getCurrentIndex(),p.getCurrentIndex());   //윷판 위의 말을 이동하는 경우 그 말이 있는 위치의 모든 말을 이동
             for(ThrowData data:_data.previewPawns) data.preview.setVisible(false);  //말 이동 후 미리보기 모두 보이지 않게 하기
 
-
-            _data.previewPawns.remove(clicked); //결과 데이터의 리스트에서 방금 사용된 결과 데이터를 삭제
+            //78줄이랑 88줄이랑 같이 묶어서 메소드로 처리. 여기에서
+            removeClickedPreview(p);
             _data.previewPawns.trimToSize();    //리스트 사이즈 갱신
 
             //현재 플레이어의 말이 전부 완주하면 game end -> 대화상자
             if(_data.activatedPlayer.score ==4){    //말 4개가 모두 완주
+                //스트링 다시 설정 "left"+str 이정도로
                 String str;
                 //승자에 따라 메시지 설정
                 if(_data.activatedPlayer== _data.leftPlayer) str="Left Player Win!! \n Do you want new Game?" ;
                 else str= "Right Player Win!! \n Do you want new Game?";
 
-//                JOptionPane dialog = new JOptionPane();
                 int result = JOptionPane.showConfirmDialog( _view, str,"Game End",JOptionPane.YES_NO_OPTION);   //게임을 계속 진행할 지  묻기
 
                 makeInputinfoFrame();
                 switch(result) {
                     case JOptionPane.NO_OPTION:
                         _inputinfo.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-//                        InputInfo frame = new InputInfo();
-//                        frame.setTitle("Input ID");
-//                        frame.setLocation(0,0);
-//                        frame.setSize(1000,800);
-//                        frame.setVisible(true);
-//                        frame.setResizable(true);
-//                        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
                         break;
-                    case JOptionPane.YES_OPTION:
-//                        InputInfo frame1 = new InputInfo();
-//                        frame1.setTitle("Input ID");
-//                        frame1.setLocation(0,0);
-//                        frame1.setSize(1000,800);
-//                        frame1.setVisible(true);
-//                        frame1.setResizable(true);
 
- 
-                    default:
-                        //for(Pawn pawn:_data.activatedPlayer.pawns) pawn.removeMouseListener(_data.activatedPlayer == _data.leftPlayer ? leftPawnListener : rightPawnListener);
+                    case JOptionPane.YES_OPTION:
                         deactivationPawnClick();
  
                         if( _data.activatedPlayer == _data.rightPlayer) passPlayerTurn();
@@ -138,17 +115,14 @@ public class InGameController {
                         GameManager.getInstance().get_view().showMenu();
                         return;
                 } // switch
-            }
+            }//if  ->메소드로 빼기
 
             //게임이 계속 진행되는 경우
-
             if(catched) {   //말 이동 후 상대 말을 잡으면 윷을 던질 기회 획득
                 ready(_data.activatedPlayer);   //윷 던질 준비 시키기
-                //for(Pawn pawn:_data.activatedPlayer.pawns) pawn.removeMouseListener(_data.activatedPlayer == _data.leftPlayer ? leftPawnListener : rightPawnListener);  //윷을 던지는 동안에는 말 이동시키지 못하도록 리스너 제거
                 deactivationPawnClick();
             }
             else if(_data.previewPawns.size()==0) { //추가 턴을 획득하지 못하고 던진 윷 결과데이터들을 모두 사용한 경우
-                //for(Pawn pawn:_data.activatedPlayer.pawns) pawn.removeMouseListener(_data.activatedPlayer == _data.leftPlayer ? leftPawnListener : rightPawnListener);  //말 선택 리스너 모두 제거
                 deactivationPawnClick();
                 passPlayerTurn();   //상대에게 턴 넘겨주기
             }
@@ -165,7 +139,6 @@ public class InGameController {
                     }
                     if(flag == true){   //게임판에 올라온 말이 없는 경우(빽도 이동이 가능한 말이 없는 경우)
                         //더이상 이동할 수 없으므로 턴 넘겨주기
-                        //for(Pawn pawn:_data.activatedPlayer.pawns) pawn.removeMouseListener(_data.activatedPlayer == _data.leftPlayer ? leftPawnListener : rightPawnListener);
                         deactivationPawnClick();
                         passPlayerTurn();
                         _data.previewPawns.clear();
@@ -174,6 +147,17 @@ public class InGameController {
                 }//if
             }//else
         }
+
+        void removeClickedPreview(Pawn p){
+            ThrowData clicked = null;
+
+            for(ThrowData data:_data.previewPawns) //결과 데이터에서 이벤트가 발생한 미리보기 말 찾기
+                if(data.preview == p) clicked = data;
+
+            _data.previewPawns.remove(clicked); //결과 데이터의 리스트에서 방금 사용된 결과 데이터를 삭제
+
+        }
+
 
         @Override
         public void mouseEntered(MouseEvent e) { }
@@ -205,22 +189,8 @@ public class InGameController {
             //상태
             if(_data.activatedPlayer.isNowAbility1Use==true)    //윷 결과 조작 능력 사용
                 _data.activatedPlayer.isNowAbility1Use=false;
-                //상태
+             //상태
             else{   //윷 결과 랜덤으로 뽑기
-
-//                YutResult = Math.random();
-//                if (YutResult <= 0.1536)
-//                    _data.throwResult =1;
-//                else if (YutResult <= 0.4992)
-//                    _data.throwResult = 2;
-//                else if (YutResult <= 0.7584)
-//                    _data.throwResult = 3;
-//                else if (YutResult <= 0.8880)
-//                    _data.throwResult = 4;
-//                else if (YutResult <= 0.9136)
-//                    _data.throwResult = 5;
-//                else if (YutResult < 1)
-//                    _data.throwResult = 6;
                 _data.throwResult = randomYutResult();
             }
             //모습
@@ -248,35 +218,21 @@ public class InGameController {
                 for(ThrowData d:_data.previewPawns) {   //결과 데이터들 중 빽도가 아닌 것이 있는 지 확인
                     if(d.result != 6) flag = false;
                 }
-                if(flag == true){   //결과들이 모두 빽도인 경우 말을 이동할 준비
-                    for(Pawn pawn:_data.activatedPlayer.pawns){ //내 말 중 이동 가능한 말이 있는 지 확인
-                        if(pawn.getCurrentIndex()!=0) flag = false;
-                    }
-                    if(flag == true){   //윷판에 올라온 말이 없는 경우(빽도 이동이 가능한 말이 없는 경우)
+                for(Pawn pawn:_data.activatedPlayer.pawns){ //내 말 중 이동 가능한 말이 있는 지 확인
+                    if(pawn.getCurrentIndex()!=0) flag = false;
+                }
+                if(flag){   //결과들이 모두 빽도인 경우 말을 이동할 준비
+                    // 윷판에 올라온 말이 없는 경우(빽도 이동이 가능한 말이 없는 경우)
                         //상대 턴으로 넘어가기
-                        //for(Pawn pawn:_data.activatedPlayer.pawns) pawn.removeMouseListener(_data.activatedPlayer == _data.leftPlayer ? leftPawnListener : rightPawnListener);
-                        deactivationPawnClick();
-                        passPlayerTurn();
-                        _data.previewPawns.clear();
-                        _data.previewPawns.trimToSize();
-                    }
-                    else{   //이동할 말이 있다면 말 이동을 위한 준비
-                        //내 말 중 완주하지 않은 말에 말 선택 리스너를 add
-                        activationPawnClick();
-//                            if (P.isFinished() == false)
-//                        for (Pawn P : _data.activatedPlayer.pawns)
-//                                P.addMouseListener(_data.activatedPlayer == _data.leftPlayer ? leftPawnListener : rightPawnListener);
-                    }
+                    deactivationPawnClick();
+                    passPlayerTurn();
+                    _data.previewPawns.clear();
+                    _data.previewPawns.trimToSize();
                 }
                 else {
                     //말 이동 준비
                     //내 말 중 완주하지 않은 말에 말 선택 리스너를  add
-                    activationPawnClick();
-//                    for (Pawn P : _data.activatedPlayer.pawns) {
-//                        if (P.isFinished() == false) {
-//                            P.addMouseListener(_data.activatedPlayer == _data.leftPlayer ? leftPawnListener : rightPawnListener);
-//                        }   //if
-//                    }   //for
+                     activationPawnClick();
                 }   //else
             }   //if(다 던짐)
             else {  //던질 기회가 남았다면 다시 던질 준비
@@ -312,43 +268,21 @@ public class InGameController {
         }
     }
 
-    public void init_Game(){    //게임 초기화 메소드
+    public void initGame(){    //게임 초기화 메소드
         //양쪽 플레이어의 말에 add된 리스너 제거
         for(Pawn p:_data.leftPlayer.pawns)
             p.removeMouseListener(leftPawnListener);
-//            p.removeMouseListener(_data.activatedPlayer == _data.leftPlayer ? leftPawnListener : rightPawnListener);
         for(Pawn p:_data.rightPlayer.pawns)
             p.removeMouseListener(rightPawnListener);
-//            p.removeMouseListener(_data.activatedPlayer == _data.leftPlayer ? leftPawnListener : rightPawnListener);
 
         //양 플레이어의 던지기 버튼 비활성화
         _view.btnThrowLeft.setEnabled(false);
         _view.btnThrowRight.setEnabled(false);
     }//init_Game()
 
+    //중복코드변경
+    public void changePlayerImgnLabel(){   //진행중인 차례에 맞게 플레이어 이미지 바꾸는 메소드
 
-    public void change_playerImgnLabel(){   //진행중인 차례에 맞게 플레이어 이미지 바꾸는 메소드
-        //left player turn
-        if(_data.activatedPlayer == _data.leftPlayer){
-            _data.leftPlayer.imgPlayer.setIcon(_data.leftPlayer.iconPalyer[0]);
-            _data.leftPlayer.imgPlayer.setBounds(-25,90,250,230);
-            _data.rightPlayer.imgPlayer.setIcon(_data.rightPlayer.iconPalyer[1]);
-            _data.rightPlayer.imgPlayer.setBounds(-1,90,250,230);
-
-
-            _data.leftPlayer.lblTurn.setVisible(true);
-            _data.rightPlayer.lblTurn.setVisible(false);
-        }
-        //right player turn
-        else{
-            _data.leftPlayer.imgPlayer.setIcon(_data.leftPlayer.iconPalyer[1]);
-            _data.leftPlayer.imgPlayer.setBounds(-1,90,250,230);
-            _data.rightPlayer.imgPlayer.setIcon(_data.rightPlayer.iconPalyer[0]);
-            _data.rightPlayer.imgPlayer.setBounds(-25,90,250,230);
-
-            _data.leftPlayer.lblTurn.setVisible(false);
-            _data.rightPlayer.lblTurn.setVisible(true);
-        }
     }
 
     public void ready(Player player){   //던지기 버튼을 누를 수 있도록 활성화 하는 메소드
@@ -365,14 +299,15 @@ public class InGameController {
 
         _view.lblYutResult.setIcon(_data.iconYutText[6]);   //윷 결과 지우기
 
-        change_playerImgnLabel();   //플레이어 이미지와 라벨 변경
+        changePlayerImgnLabel();   //플레이어 이미지와 라벨 변경
         ready(_data.activatedPlayer);   //던지기 버튼 활성화
     }
 
     public void showAllPreviews(){  //선택된 말이 이동할 수 있는 경우를 모두 보여주는 메소드
         for(ThrowData data:_data.previewPawns) {
             data.preview.setVisible(true);
-            if(data.result == 6 && _data.focusedPawn.getCurrentIndex() == 0) data.preview.setVisible(false);    //말이 이동할 곳이 없는 경우는 보이지 않도록 설정
+            if(data.result == 6 && _data.focusedPawn.getCurrentIndex() == 0)
+                data.preview.setVisible(false);    //말이 이동할 곳이 없는 경우는 보이지 않도록 설정
             else _data.findNextPoint(data); //말이 결과 데이터에 따라 이동하게 될 위치 찾기
         }
         GameManager.getInstance().get_inGame().repaint();
