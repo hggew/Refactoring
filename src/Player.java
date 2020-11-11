@@ -12,7 +12,7 @@ public class Player {
     public int         pawnImgWidth, pawnImgHeight;
 
     public JLabel       imgPlayer, lblTurn;                    //플레이어 이미지와 차례를 알려주는 라벨
-    public ImageIcon[]  iconPalyer;                            //imgPlayer에 붙일 이미지아이콘 배열
+    public ImageIcon[]  iconPlayer;                            //imgPlayer에 붙일 이미지아이콘 배열
 
 
     //생성자
@@ -67,7 +67,7 @@ public class Player {
         isNowAbility1Use= false;
         isNowAbility2Use= false;
 
-        iconPalyer = new ImageIcon[2];
+        iconPlayer = new ImageIcon[2];
         imgPlayer = new JLabel();
 
         //차례를 알려주는 라벨 생성 및 설정

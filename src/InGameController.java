@@ -115,7 +115,7 @@ public class InGameController {
                         GameManager.getInstance().get_view().showMenu();
                         return;
                 } // switch
-            }//if  ->메소드로 빼기
+            }
 
             //게임이 계속 진행되는 경우
             if(catched) {   //말 이동 후 상대 말을 잡으면 윷을 던질 기회 획득
